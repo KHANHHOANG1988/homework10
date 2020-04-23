@@ -12,6 +12,83 @@ var connection = mysql.createConnection({
 }); 
 connection.connect(function(err) {
     if (err) throw err;
-    connection.end();
+    promptuser();
   });
-  
+
+// Prompt for user input 
+function promptuser() {
+    inquirer
+      .prompt(
+        {
+          type: "list",
+          message: "Welcome to Employee Tracker. What would you like to do?",
+          name: "choices",
+          choices: [
+            {
+              name: "View all employees",
+              value: "viewEmployees"
+            },
+            {
+              name: "View all employees by departments",
+              value: "viewDepartments"
+            },
+            {
+              name: "View all employees by roles",
+              value: "viewRoles"
+            },
+            {
+              name: "Add employee",
+              value: "addEmployee"
+            },            
+            {
+              name: "Add role",
+              value: "addRole"
+            },
+            {
+              name: "Add manager",
+              value: "addManager"
+              },
+            {
+              name: "Update epmloyee role",
+              value: "updateRole"
+            },
+            
+            {
+              name: "Quit",
+              value: "quit"
+            }
+          ]
+        }).then(function (res) {
+          // console.log(res);
+        questions(res.choices)
+      })
+  }
+
+//   swich case function
+  function questions(option) {
+    switch (option) {
+      case "viewEmployees":
+        viewAllEmployees();
+        break;
+      case "viewDepartments":
+        viewAllDepartments();
+        break;
+      case "viewRoles":
+        viewAllRoles();
+        break;
+      case "addEmployee":
+        addEmployee();
+        break;      
+      case "addRole":
+        addRole();
+        break;
+      case "addManager":
+        addManager();
+        break;
+      case "updateRole":
+        updateRole();
+        break;      
+      case "quit":
+        end();
+    }
+  }
