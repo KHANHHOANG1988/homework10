@@ -92,3 +92,37 @@ function promptuser() {
         end();
     }
   }
+
+// to view all employess   
+    function viewAllEmployees() {
+        connection.query("SELECT * from employee", function (error, res) {
+        console.table(res);
+        promptmore();
+        })
+    }
+//   to view all departments
+    function viewAllDepartments() {
+        connection.query("SELECT * from department", function (error, res) {
+        console.table(res);
+        promptmore();
+        })
+    }
+
+//   to view all roles
+    function viewAllRoles() {
+        connection.query("SELECT * from role", function (error, res) {
+        console.table(res);
+        promptmore();
+        })
+    }
+
+
+// ask if user wants to continue
+  function promptmore() {
+    confirm("Would you like to continue?")
+    .then(function confirmed() {
+      promptuser();
+    }, function cancelled() {
+      end();
+    });
+  }
