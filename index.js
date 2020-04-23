@@ -24,74 +24,104 @@ function promptuser() {
                 message: "What would you like to do?",
                 name: "choices",
                 choices: [
-                    {
-                        name: "View all employees",
-                        value: "viewEmployees"
-                    },
-                    {
-                        name: "View all employees by departments",
-                        value: "viewDepartments"
-                    },
-                    {
-                        name: "View all employees by roles",
-                        value: "viewRoles"
-                    },
-                    {
-                        name: "Add employee",
-                        value: "addEmployee"
-                    },
-                    {
-                        name: "Add role",
-                        value: "addRole"
-                    },
-                    {
-                        name: "Add manager",
-                        value: "addManager"
-                    },
-                    {
-                        name: "Update epmloyee role",
-                        value: "updateRole"
-                    },
-
-                    {
-                        name: "Quit",
-                        value: "quit"
-                    }
-                ]
+                    "View all employees",
+                    "View all employees by departments",
+                    "View all employees by roles",
+                    "Add employee",
+                    "Add role",
+                    "Add manager",
+                    "Update epmloyee role",
+                    "Quit",]
+                    
+                //     {
+                //         name: "View all employees",
+                //         value: "viewEmployees"
+                //     },
+                //     {
+                //         name: "View all employees by departments",
+                //         value: "viewDepartments"
+                //     },
+                //     {
+                //         name: "View all employees by roles",
+                //         value: "viewRoles"
+                //     },
+                //     {
+                //         name: "Add employee",
+                //         value: "addEmployee"
+                //     },
+                //     {
+                //         name: "Add role",
+                //         value: "addRole"
+                //     },
+                //     {
+                //         name: "Add manager",
+                //         value: "addManager"
+                //     },
+                //     {
+                //         name: "Update epmloyee role",
+                //         value: "updateRole"
+                //     },
+                //     {
+                //         name: "Quit",
+                //         value: "quit"
+                //     }
+                // ]
             }).then(function (res) {
-                // console.log(res);
-                questions(res.choices)
+                console.log(res);
+                switch (res.choices) {
+                    case "View all employees":
+                        viewAllEmployees();
+                        break;
+                    case "View all employees by departments":
+                        viewAllDepartments();
+                        break;
+                    case "View all employees by roles":
+                        viewAllRoles();
+                        break;
+                    case "add Employee":
+                        promptEmployee();
+                        break;
+                    case "add Role":
+                        promptRole();
+                        break;
+                    case "add Manager":
+                        promptManager();
+                        break;
+                    case "Update epmloyee role":
+                        promptUpdateRole();
+                        break;
+                }
             })
-}
+        }
 
-//   swich case function
-function questions(option) {
-    switch (option) {
-        case "viewEmployees":
-            viewAllEmployees();
-            break;
-        case "viewDepartments":
-            viewAllDepartments();
-            break;
-        case "viewRoles":
-            viewAllRoles();
-            break;
-        case "addEmployee":
-            promptEmployee();
-            break;
-        case "addRole":
-            promptRole();
-            break;
-        case "addManager":
-            promptManager();
-            break;
-        case "updateRole":
-            promptUpdateRole();
-            break;
-        case "quit":
-            connection.end();
-    }
-}
+// //   swich case function
+// function questions(option) {
+//     switch (option) {
+//         case "viewEmployees":
+//             viewAllEmployees();
+//             break;
+//         case "viewDepartments":
+//             viewAllDepartments();
+//             break;
+//         case "viewRoles":
+//             viewAllRoles();
+//             break;
+//         case "addEmployee":
+//             promptEmployee();
+//             break;
+//         case "addRole":
+//             promptRole();
+//             break;
+//         case "addManager":
+//             promptManager();
+//             break;
+//         case "updateRole":
+//             promptUpdateRole();
+//             break;
+//         case "quit":
+//             connection.end();
+//     }
+// }
 
 // to view all employess   
 function viewAllEmployees() {
@@ -124,8 +154,7 @@ connection.query("SELECT * from role", function (err, res) {
 
 // collect a list of managers's name
 var ManagersList
-connection.query("SELECT * from employee WHERE role=manager", function (err, res) {
-    // console.log(error, res);
+connection.query("SELECT * from employee WHERE role_id IN (1, 3, 5, 7)", function (err, res) {
     ManagersList = res.map(employee => ({ name: `${employee.first_name} ${employee.last_name}` }))
 })
 
@@ -137,9 +166,10 @@ connection.query("SELECT * from department", function (err, res) {
 
 //   collect all employees' name
 var EmployeesList
-connection.query("SELECT * from employee WHERE role=manager", function (err, res) {
+connection.query("SELECT * from employee", function (err, res) {
     EmployeesList = res.map(employee => ({ name: `${employee.first_name} ${employee.last_name}` }))
 })
+
 // prompt for employee info
 function promptEmployee() {
     inquirer
@@ -261,6 +291,6 @@ function promptmore() {
         .then(function confirmed() {
             promptuser();
         }, function cancelled() {
-            connection.end();
+            end();
         });
 }
