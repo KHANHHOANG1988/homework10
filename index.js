@@ -90,6 +90,8 @@ function promptuser() {
                     case "Update epmloyee role":
                         promptUpdateRole();
                         break;
+                    case "Quit":
+                        connection.end();
                 }
             })
         }
@@ -260,7 +262,7 @@ function promptUpdateRole() {
             {
                 type: "list",
                 message: "For which employee would you like to update the role?",
-                name: "empID",
+                name: "employeeID",
                 choices: EmployeesList
             },
             {
@@ -277,11 +279,12 @@ function promptUpdateRole() {
 
 //   update employee role
 function updateRole(data) {
-    connection.query(`UPDATE employee SET role_id = ${data.titleID} WHERE id = ${data.empID}`,
+    connection.query(`UPDATE employee SET role_id = ${data.titleID} WHERE id = ${data.employeeID}`,
         function (error, res) {
             if (error) throw error;
+            console.log(error);
         });
-    promptmore();
+        promptmore();
 }
 
 
@@ -291,6 +294,6 @@ function promptmore() {
         .then(function confirmed() {
             promptuser();
         }, function cancelled() {
-            end();
+            connection.end();
         });
 }
